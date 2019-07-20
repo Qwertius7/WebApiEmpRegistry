@@ -1,9 +1,6 @@
 using Ninject.Modules;
-using Repository.dto;
 using Repository.impl;
 using Repository.interfaces;
-using Repository.operations;
-using Repository.operations.interfaces;
 
 namespace Repository.config
 {
@@ -11,9 +8,8 @@ namespace Repository.config
     {
         public override void Load()
         {
-            Bind<DbOps<DepartmentDto>>().To<DepartmentOps>();
-            Bind<DbOps<EmployeeDto>>().To<EmployeeOps>();
-            Bind<IGenericRepository>().To<GenericDbRepository>();
+            Bind<IDepartmentRepository>().To<DepartmentRepository>();
+            Bind<IEmployeeRepository>().To<EmployeeRepository>();
         }
     }
 }

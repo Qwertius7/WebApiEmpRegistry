@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using data.models;
 
-namespace Repository.dto
+namespace ApplicationLayer.dto
 {
     public class DepartmentDto
     {

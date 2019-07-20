@@ -74,13 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\Bindings.cs" />
-    <Compile Include="dto\DepartmentDto.cs" />
-    <Compile Include="dto\EmployeeDto.cs" />
-    <Compile Include="impl\GenericDBRepository.cs" />
-    <Compile Include="interfaces\IGenericRepository.cs" />
-    <Compile Include="operations\DepartmentOps.cs" />
-    <Compile Include="operations\EmployeeOps.cs" />
-    <Compile Include="operations\interfaces\DbOps.cs" />
+    <Compile Include="impl\DepartmentRepository.cs" />
+    <Compile Include="impl\EmployeeRepository.cs" />
+    <Compile Include="interfaces\IDepartmentRepository.cs" />
+    <Compile Include="interfaces\IEmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
