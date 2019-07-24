@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Entity.Core;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Repository.dto;
-using Repository.interfaces;
+using ApplicationLayer.dto;
+using ApplicationLayer.interfaces;
 
 namespace WebApiEmpRegistry.Controllers
 {
     [RoutePrefix("api/emp")]
     public class EmpController : ApiController
     {
-        private readonly IGenericRepository _repo;
+        private readonly IEmployeeService _empService;
 
         public EmpController() {}
 
-        public EmpController(IGenericRepository repo)
+        public EmpController(IEmployeeService empService)
         {
-            _repo = repo;
+            _empService = empService;
         }
 
         [Route("")]
         public async Task<HttpResponseMessage> Get()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllEmployees());
+            return Request.CreateResponse(HttpStatusCode.OK, await _empService.GetAllEmployees());
         }
 
         [Route("{id}")]
@@ -34,45 +33,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetEmployeeById(id));
-            }
-            catch (ObjectNotFoundException)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
-        
-        [HttpGet]
-        [Route("full")]
-        public async Task<HttpResponseMessage> GetAllExtra()
-        {
-            var result = new List<EmployeeGetModel>();
-            foreach (var employee in _repo.GetAllEmployees())
-            {
-                var getModel = new EmployeeGetModel(employee)
-                {
-                    Department = employee.DepartmentId == Guid.Empty ? null
-                        : _repo.GetDepartmentById(employee.DepartmentId)
-                };
-                result.Add(getModel);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, result);
-        }
-        
-        [HttpGet]
-        [Route("{id}/full")]
-        public async Task<HttpResponseMessage> GetExtra(Guid id)
-        {
-            try
-            {
-                var employee = _repo.GetEmployeeById(id);
-                var getModel = new EmployeeGetModel(employee)
-                {
-                    Department = employee.DepartmentId == Guid.Empty ? null
-                        : _repo.GetDepartmentById(employee.DepartmentId)
-                };
-                return Request.CreateResponse(HttpStatusCode.OK, getModel);
+                return Request.CreateResponse(HttpStatusCode.OK, await _empService.GetEmployeeById(id));
             }
             catch (ObjectNotFoundException)
             {
@@ -86,7 +47,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             Guid newId = Guid.NewGuid();
             emp.Id = newId;
-            return Request.CreateResponse(HttpStatusCode.OK, _repo.CreateEmployee(emp));
+            return Request.CreateResponse(HttpStatusCode.OK, await _empService.CreateEmployee(emp));
         }
 
         [HttpPut]
@@ -95,7 +56,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.UpdateEmployee(emp));
+                return Request.CreateResponse(HttpStatusCode.OK, await _empService.UpdateEmployee(emp));
             }
             catch (InvalidDataException)
             {
@@ -109,7 +70,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             try
             {
-                return Request.CreateResponse(_repo.DeleteDepartmentById(id));
+                return Request.CreateResponse(await _empService.DeleteEmployeeById(id));
             }
             catch (ObjectNotFoundException)
             {

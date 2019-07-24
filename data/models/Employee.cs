@@ -14,14 +14,5 @@ namespace data.models
         {
             return $"Employee {Id}:\n\t{FirstName} {LastName}\n\tDepartment: {Department}";
         }
-        
-        public Employee ModifyWithNewParameters(Employee newOne)
-        {
-            if (this.Id != newOne.Id) return this;
-            this.FirstName = newOne.FirstName;
-            this.LastName = newOne.LastName;
-            this.Department = newOne.Department;
-            return this;
-        }
     }
 }

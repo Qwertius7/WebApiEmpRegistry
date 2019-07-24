@@ -9,11 +9,5 @@ namespace data.models
         public string Title { get; set; }
 
         public ICollection<Employee> Employees { get; set; }
-        
-        public Department ModifyWithNewParameters(Department newDep)
-        {
-            Title = newDep.Title;
-            return this;
-        }
     }
 }

@@ -5,27 +5,27 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Repository.dto;
-using Repository.interfaces;
+using ApplicationLayer.dto;
+using ApplicationLayer.interfaces;
 
 namespace WebApiEmpRegistry.Controllers
 {
     [RoutePrefix("api/dep")]
     public class DepController : ApiController
     {
-        private readonly IGenericRepository _repo;
+        private IDepartmentService _depService;
 
         public DepController() {}
 
-        public DepController(IGenericRepository repo)
+        public DepController(IDepartmentService depService)
         {
-            _repo = repo;
+            _depService = depService;
         }
         
         [Route("")]
         public async Task<HttpResponseMessage> Get()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, _repo.GetAllDepartments());
+            return Request.CreateResponse(HttpStatusCode.OK, await _depService.GetAllDepartments());
         }
         
         [Route("{id}")]
@@ -33,7 +33,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.GetDepartmentById(id));
+                return Request.CreateResponse(HttpStatusCode.OK, await _depService.GetDepartmentById(id));
             }
             catch (ObjectNotFoundException)
             {
@@ -45,9 +45,9 @@ namespace WebApiEmpRegistry.Controllers
         [Route("")]
         public async Task<HttpResponseMessage> Create(DepartmentDto dep)
         {
-            Guid newId = Guid.NewGuid();
+            var newId = Guid.NewGuid();
             dep.Id = newId;
-            return Request.CreateResponse(HttpStatusCode.OK, _repo.CreateDepartment(dep));
+            return Request.CreateResponse(HttpStatusCode.OK, await _depService.CreateDepartment(dep));
         }
 
         [HttpPut]
@@ -56,7 +56,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, _repo.UpdateDepartment(dep));
+                return Request.CreateResponse(HttpStatusCode.OK, await _depService.UpdateDepartment(dep));
             }
             catch (InvalidDataException)
             {
@@ -70,7 +70,7 @@ namespace WebApiEmpRegistry.Controllers
         {
             try
             {
-                return Request.CreateResponse(_repo.DeleteDepartmentById(id));
+                return Request.CreateResponse(await _depService.DeleteDepartmentById(id));
             }
             catch (ObjectNotFoundException)
             {
