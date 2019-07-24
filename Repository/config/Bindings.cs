@@ -1,15 +1,15 @@
-using Ninject.Modules;
+using Autofac;
 using Repository.impl;
 using Repository.interfaces;
 
 namespace Repository.config
 {
-    public class Bindings : NinjectModule
+    public class Bindings : Module
     {
-        public override void Load()
+        protected override void Load(ContainerBuilder builder)
         {
-            Bind<IDepartmentRepository>().To<DepartmentRepository>();
-            Bind<IEmployeeRepository>().To<EmployeeRepository>();
+            builder.RegisterType<DepartmentRepository>().As<IDepartmentRepository>().InstancePerRequest();
+            builder.RegisterType<EmployeeRepository>().As<IEmployeeRepository>().InstancePerRequest();
         }
     }
 }

@@ -1,18 +1,15 @@
-using System.Web.Http;
 using ApplicationLayer.interfaces;
 using ApplicationLayer.services;
-using Ninject.Modules;
-using Ninject.Web.WebApi.Filter;
+using Autofac;
 
 namespace ApplicationLayer.config
 {
-    public class ServicesDiModule : NinjectModule
+    public class ServicesDiModule : Module
     {
-        public override void Load()
+        protected override void Load(ContainerBuilder builder)
         {
-            Bind<DefaultFilterProviders>().ToConstant(new DefaultFilterProviders(GlobalConfiguration.Configuration.Services.GetFilterProviders()));
-            Bind<IDepartmentService>().To<DepartmentService>();
-            Bind<IEmployeeService>().To<EmployeeService>();
+            builder.RegisterType<DepartmentService>().As<IDepartmentService>().InstancePerRequest();
+            builder.RegisterType<EmployeeService>().As<IEmployeeService>().InstancePerRequest();
         }
     }
 }

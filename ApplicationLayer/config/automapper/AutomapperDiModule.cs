@@ -1,28 +1,24 @@
+using System.Collections.Generic;
+using Autofac;
 using AutoMapper;
-using Ninject;
-using Ninject.Modules;
 
 namespace ApplicationLayer.config.automapper
 {
-    public class AutomapperDiModule : NinjectModule
+    public class AutomapperDiModule : Module
     {
-        public override void Load()
+        protected override void Load(ContainerBuilder builder)
         {
-            var mapperConfiguration = CreateConfiguration();
-            Bind<MapperConfiguration>().ToConstant(mapperConfiguration).InSingletonScope();
-
-            Bind<IMapper>().ToMethod(ctx =>
-                new Mapper(mapperConfiguration, type => ctx.Kernel.Get(type)));
-        }
-
-        private MapperConfiguration CreateConfiguration()
-        {
-            var config = new MapperConfiguration(cfg =>
+            builder.RegisterAssemblyTypes(typeof(Profile).Assembly).As<Profile>();
+            
+            builder.Register(context => new MapperConfiguration(cfg =>
             {
-                cfg.AddMaps(GetType().Assembly);
-            });
+                foreach (var profile in context.Resolve<IEnumerable<Profile>>())
+                {
+                    cfg.AddProfile(profile);
+                }
+            })).AsSelf().SingleInstance();
 
-            return config;
+            builder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();
         }
     }
 }

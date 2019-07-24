@@ -13,7 +13,7 @@ namespace Repository.impl
     {
         private readonly EmpRegistryContext _context;
 
-        protected EmployeeRepository()
+        public EmployeeRepository()
         {
             _context = new EmpRegistryContext();
         }
