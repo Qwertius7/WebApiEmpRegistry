@@ -12,36 +12,38 @@ namespace ApplicationLayer.services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _repo;
+        private readonly IMapper _mapper;
         
         public EmployeeService() {}
 
-        public EmployeeService(IEmployeeRepository repo)
+        public EmployeeService(IEmployeeRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
         public async Task<IEnumerable<EmployeeDto>> GetAllEmployees()
         {
-            return Mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(await _repo.GetAllEmployees());
+            return _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(await _repo.GetAllEmployees());
         }
 
         public async Task<EmployeeDto> GetEmployeeById(Guid id)
         {
-            return Mapper.Map<EmployeeDto>(await _repo.GetEmployeeById(id));
+            return _mapper.Map<EmployeeDto>(await _repo.GetEmployeeById(id));
         }
 
         public async Task<EmployeeDto> CreateEmployee(EmployeeDto emp)
         {
-            return Mapper.Map<EmployeeDto>(await _repo.CreateEmployee(Mapper.Map<Employee>(emp)));
+            return _mapper.Map<EmployeeDto>(await _repo.CreateEmployee(_mapper.Map<Employee>(emp)));
         }
 
         public async Task<EmployeeDto> UpdateEmployee(EmployeeDto emp)
         {
-            return Mapper.Map<EmployeeDto>(await _repo.UpdateEmployee(Mapper.Map<Employee>(emp)));
+            return _mapper.Map<EmployeeDto>(await _repo.UpdateEmployee(_mapper.Map<Employee>(emp)));
         }
 
         public async Task<EmployeeDto> DeleteEmployeeById(Guid id)
         {
-            return Mapper.Map<EmployeeDto>(await _repo.DeleteEmployeeById(id));
+            return _mapper.Map<EmployeeDto>(await _repo.DeleteEmployeeById(id));
         }
     }
 }

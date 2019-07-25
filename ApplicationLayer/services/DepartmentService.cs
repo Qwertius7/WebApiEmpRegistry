@@ -12,37 +12,39 @@ namespace ApplicationLayer.services
     public class DepartmentService : IDepartmentService
     {
         private readonly IDepartmentRepository _repo;
+        private readonly IMapper _mapper;
 
         public DepartmentService() {}
 
-        public DepartmentService(IDepartmentRepository repo)
+        public DepartmentService(IDepartmentRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<DepartmentDto>> GetAllDepartments()
         {
-            return Mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentDto>>(await _repo.GetAllDepartments());
+            return _mapper.Map<IEnumerable<Department>, IEnumerable<DepartmentDto>>(await _repo.GetAllDepartments());
         }
 
         public async Task<DepartmentDto> GetDepartmentById(Guid id)
         {
-            return Mapper.Map<DepartmentDto>(await _repo.GetDepartmentById(id));
+            return _mapper.Map<DepartmentDto>(await _repo.GetDepartmentById(id));
         }
 
         public async Task<DepartmentDto> CreateDepartment(DepartmentDto dep)
         {
-            return Mapper.Map<DepartmentDto>(await _repo.CreateDepartment(Mapper.Map<Department>(dep)));
+            return _mapper.Map<DepartmentDto>(await _repo.CreateDepartment(_mapper.Map<Department>(dep)));
         }
 
         public async Task<DepartmentDto> UpdateDepartment(DepartmentDto dep)
         {
-            return Mapper.Map<DepartmentDto>(await _repo.UpdateDepartment(Mapper.Map<Department>(dep)));
+            return _mapper.Map<DepartmentDto>(await _repo.UpdateDepartment(_mapper.Map<Department>(dep)));
         }
 
         public async Task<DepartmentDto> DeleteDepartmentById(Guid id)
         {
-            return Mapper.Map<DepartmentDto>(await _repo.DeleteDepartmentById(id));
+            return _mapper.Map<DepartmentDto>(await _repo.DeleteDepartmentById(id));
         }
     }
 }

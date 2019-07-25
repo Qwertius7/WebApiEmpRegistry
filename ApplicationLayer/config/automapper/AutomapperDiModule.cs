@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Autofac;
 using AutoMapper;
@@ -8,7 +9,10 @@ namespace ApplicationLayer.config.automapper
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(Profile).Assembly).As<Profile>();
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            builder.RegisterAssemblyTypes(assemblies)
+                .Where(t => typeof(Profile).IsAssignableFrom(t) && !t.IsAbstract && t.IsPublic)
+                .As<Profile>();
             
             builder.Register(context => new MapperConfiguration(cfg =>
             {
@@ -18,7 +22,9 @@ namespace ApplicationLayer.config.automapper
                 }
             })).AsSelf().SingleInstance();
 
-            builder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper()).As<IMapper>();
+            builder.Register(ctx => ctx.Resolve<MapperConfiguration>().CreateMapper())
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
         }
     }
 }
