@@ -25,11 +25,13 @@ namespace Repository.impl
 
         public async Task<Department> GetDepartmentById(Guid id)
         {
-            return await _context.Departments.FindAsync(id);
+            return await _context.Departments.SingleOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<Department> CreateDepartment(Department dep)
         {
+            if (await _context.Employees.AnyAsync(e => e.Id == dep.Id)) 
+                throw new Exception("Department with such id already exists");
             _context.Departments.Add(dep);
             await _context.SaveChangesAsync();
             return dep;
@@ -37,7 +39,7 @@ namespace Repository.impl
 
         public async Task<Department> UpdateDepartment(Department dep)
         {
-            var selectedDepartment = await _context.Departments.SingleOrDefaultAsync(d => d.Id == dep.Id);
+            var selectedDepartment = await GetDepartmentById(dep.Id);
             if (selectedDepartment == null) return null;
             selectedDepartment.Title = dep.Title;
             selectedDepartment.Employees = dep.Employees;
@@ -47,14 +49,16 @@ namespace Repository.impl
 
         public async Task<Department> DeleteDepartmentById(Guid id)
         {
-            if (!await _context.Departments.AnyAsync(e => e.Id == id)) return null;
-            foreach (var emp in _context.Employees)
+            var departmentToDeletion = await _context.Departments.SingleOrDefaultAsync(d => d.Id == id);
+            if (departmentToDeletion == null) return null;
+            foreach (var emp in _context.Employees.Include("Department")
+                .Where(emp => emp.Department.Id == departmentToDeletion.Id))
             {
                 emp.Department = null;
             }
-            var result = _context.Departments.Remove(_context.Departments.Single(e => e.Id == id));
+            var resultAfterDeletion = _context.Departments.Remove(departmentToDeletion);
             await _context.SaveChangesAsync();
-            return result;
+            return resultAfterDeletion;
         }
     }
 }

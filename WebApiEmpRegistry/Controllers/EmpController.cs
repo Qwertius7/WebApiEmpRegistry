@@ -25,19 +25,31 @@ namespace WebApiEmpRegistry.Controllers
         [Route("")]
         public async Task<HttpResponseMessage> Get()
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await _empService.GetAllEmployees());
+            try
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, await _empService.GetAllEmployees());
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
         [Route("{id}")]
         public async Task<HttpResponseMessage> Get(Guid id)
         {
+            if (id.Equals(Guid.Empty))
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid parameter");
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _empService.GetEmployeeById(id));
+                var resultEmployee = await _empService.GetEmployeeById(id);
+                return resultEmployee != null 
+                    ? Request.CreateResponse(HttpStatusCode.OK, resultEmployee)
+                    : Request.CreateResponse(HttpStatusCode.NotFound, "Selected Employee is absent");
             }
-            catch (ObjectNotFoundException)
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
@@ -45,22 +57,39 @@ namespace WebApiEmpRegistry.Controllers
         [Route("")]
         public async Task<HttpResponseMessage> Create(EmployeeDto emp)
         {
-            Guid newId = Guid.NewGuid();
-            emp.Id = newId;
-            return Request.CreateResponse(HttpStatusCode.OK, await _empService.CreateEmployee(emp));
+            if (emp == null)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid input Employee parameter");
+            if (!ModelState.IsValid)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+            try
+            {
+                emp.Id = Guid.NewGuid();
+                return Request.CreateResponse(HttpStatusCode.Created, await _empService.CreateEmployee(emp));
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
         [HttpPut]
         [Route("")]
         public async Task<HttpResponseMessage> Update(EmployeeDto emp)
         {
+            if (emp == null)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid input Employee parameter");
+            if (!ModelState.IsValid)
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
             try
             {
-                return Request.CreateResponse(HttpStatusCode.OK, await _empService.UpdateEmployee(emp));
+                var updatedEmployee = await _empService.UpdateEmployee(emp);
+                return updatedEmployee != null 
+                    ? Request.CreateResponse(HttpStatusCode.OK, updatedEmployee)
+                    : Request.CreateResponse(HttpStatusCode.NotFound, "Selected Employee is absent");
             }
-            catch (InvalidDataException)
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
@@ -68,13 +97,18 @@ namespace WebApiEmpRegistry.Controllers
         [Route("{id}")]
         public async Task<HttpResponseMessage> Delete(Guid id)
         {
+            if (id.Equals(Guid.Empty))
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid parameter");
             try
             {
-                return Request.CreateResponse(await _empService.DeleteEmployeeById(id));
+                var deletedEmployee = await _empService.DeleteEmployeeById(id);
+                return deletedEmployee != null 
+                    ? Request.CreateResponse(HttpStatusCode.OK, deletedEmployee)
+                    : Request.CreateResponse(HttpStatusCode.NotFound, "Selected Employee is absent");
             }
-            catch (ObjectNotFoundException)
+            catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, e.Message);
             }
         }
     }

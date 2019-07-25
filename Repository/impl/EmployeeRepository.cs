@@ -32,15 +32,15 @@ namespace Repository.impl
         {
             if (await _context.Employees.AnyAsync(e => e.Id == emp.Id)) 
                 throw new Exception("User with such id already exists");
-            _context.Employees.Add(emp);
+            var resultAfterCreation = _context.Employees.Add(emp);
             await _context.SaveChangesAsync();
-            return emp;
+            return resultAfterCreation;
         }
 
         public async Task<Employee> UpdateEmployee(Employee emp)
         {
             var selectedEmployee = await GetEmployeeById(emp.Id);
-            if (selectedEmployee == null) throw new Exception("There is no such user");
+            if (selectedEmployee == null) return null;
             selectedEmployee.Department = emp.Department;
             selectedEmployee.FirstName = emp.FirstName;
             selectedEmployee.LastName = emp.LastName;
@@ -50,10 +50,9 @@ namespace Repository.impl
 
         public async Task<Employee> DeleteEmployeeById(Guid id)
         {
-            if (!await _context.Employees.AnyAsync(e => e.Id == id)) 
-                throw new Exception("There is no such user");
-            var resultAfterDeletion = _context.Employees.Remove(
-                _context.Employees.Single(e => e.Id == id));
+            var employeeToDeletion = await _context.Employees.SingleOrDefaultAsync(e => e.Id == id);
+            if (employeeToDeletion == null) return null;
+            var resultAfterDeletion = _context.Employees.Remove(employeeToDeletion);
             await _context.SaveChangesAsync();
             return resultAfterDeletion;
         }
