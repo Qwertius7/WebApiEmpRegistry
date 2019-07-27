@@ -1,6 +1,4 @@
 using System;
-using System.Data.Entity.Core;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -63,7 +61,6 @@ namespace WebApiEmpRegistry.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
             try
             {
-                dep.Id = Guid.NewGuid();
                 return Request.CreateResponse(HttpStatusCode.Created, await _depService.CreateDepartment(dep));
             }
             catch (Exception e)

@@ -12,13 +12,15 @@ namespace ApplicationLayer.services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _repo;
+        private readonly IDepartmentRepository _depRepo;
         private readonly IMapper _mapper;
         
         public EmployeeService() {}
 
-        public EmployeeService(IEmployeeRepository repo, IMapper mapper)
+        public EmployeeService(IEmployeeRepository repo, IDepartmentRepository depRepo, IMapper mapper)
         {
             _repo = repo;
+            _depRepo = depRepo;
             _mapper = mapper;
         }
         public async Task<IEnumerable<EmployeeDto>> GetAllEmployees()
@@ -38,12 +40,17 @@ namespace ApplicationLayer.services
 
         public async Task<EmployeeDto> UpdateEmployee(EmployeeDto emp)
         {
+            var selectedEmployee = await GetEmployeeById(emp.Id);
+            var depForEmployee = await _depRepo.GetDepartmentById(emp.DepartmentId);
+            if (selectedEmployee == null || depForEmployee == null) return null;
             return _mapper.Map<EmployeeDto>(await _repo.UpdateEmployee(_mapper.Map<Employee>(emp)));
         }
 
         public async Task<EmployeeDto> DeleteEmployeeById(Guid id)
         {
-            return _mapper.Map<EmployeeDto>(await _repo.DeleteEmployeeById(id));
+            var employeeToDeletion = await GetEmployeeById(id);
+            return employeeToDeletion == null ? null : 
+                _mapper.Map<EmployeeDto>(await _repo.DeleteEmployeeById(id));
         }
     }
 }

@@ -63,7 +63,6 @@ namespace WebApiEmpRegistry.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
             try
             {
-                emp.Id = Guid.NewGuid();
                 return Request.CreateResponse(HttpStatusCode.Created, await _empService.CreateEmployee(emp));
             }
             catch (Exception e)

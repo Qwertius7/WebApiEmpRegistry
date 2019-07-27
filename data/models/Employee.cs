@@ -1,18 +1,27 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace data.models
 {
     public class Employee
     {
+        [Key]
+        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         
-        public Department Department { get; set; }
+        public Guid? DepartmentId { get; protected set; }
+        public Department Department { get; protected set; }
 
-        public override string ToString()
+        public void SetDepartment(Department dep)
         {
-            return $"Employee {Id}:\n\t{FirstName} {LastName}\n\tDepartment: {Department}";
+            if (dep == null) throw new Exception("Dep can't be null");
+//            Contract.Requires(Department != null);
+            this.DepartmentId = dep.Id;
+            this.Department = dep;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace ApplicationLayer.dto
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [Required]
+        public Guid DepartmentId { get; set; }
         public DepartmentDto Department { get; set; }
     }
 }

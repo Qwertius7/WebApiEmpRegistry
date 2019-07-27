@@ -39,12 +39,17 @@ namespace ApplicationLayer.services
 
         public async Task<DepartmentDto> UpdateDepartment(DepartmentDto dep)
         {
-            return _mapper.Map<DepartmentDto>(await _repo.UpdateDepartment(_mapper.Map<Department>(dep)));
+            var selectedDepartment = _mapper.Map<DepartmentDto>(await GetDepartmentById(dep.Id));
+            return selectedDepartment == null ? null : 
+                _mapper.Map<DepartmentDto>(await _repo.UpdateDepartment(_mapper.Map<Department>(dep)));
         }
 
         public async Task<DepartmentDto> DeleteDepartmentById(Guid id)
         {
-            return _mapper.Map<DepartmentDto>(await _repo.DeleteDepartmentById(id));
+            
+            var departmentToDeletion = await GetDepartmentById(id);
+            return departmentToDeletion == null ? null : 
+                _mapper.Map<DepartmentDto>(await _repo.DeleteDepartmentById(id));
         }
     }
 }

@@ -52,6 +52,22 @@
     <Compile Include="Migrations\201907131240059_TestInitial.Designer.cs">
       <DependentUpon>201907131240059_TestInitial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907271404154_SlightlyUpdatedDomainModel.cs" />
+    <Compile Include="Migrations\201907271404154_SlightlyUpdatedDomainModel.Designer.cs">
+      <DependentUpon>201907271404154_SlightlyUpdatedDomainModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907271757484_ChangedKeyGeneration.cs" />
+    <Compile Include="Migrations\201907271757484_ChangedKeyGeneration.Designer.cs">
+      <DependentUpon>201907271757484_ChangedKeyGeneration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907271812343_guidGeneration.cs" />
+    <Compile Include="Migrations\201907271812343_guidGeneration.Designer.cs">
+      <DependentUpon>201907271812343_guidGeneration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907272013550_NullableReferenceEmpToDep.cs" />
+    <Compile Include="Migrations\201907272013550_NullableReferenceEmpToDep.Designer.cs">
+      <DependentUpon>201907272013550_NullableReferenceEmpToDep.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="models\Department.cs" />
     <Compile Include="models\Employee.cs" />
@@ -64,6 +80,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201907131240059_TestInitial.resx">
       <DependentUpon>201907131240059_TestInitial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907271404154_SlightlyUpdatedDomainModel.resx">
+      <DependentUpon>201907271404154_SlightlyUpdatedDomainModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907271757484_ChangedKeyGeneration.resx">
+      <DependentUpon>201907271757484_ChangedKeyGeneration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907271812343_guidGeneration.resx">
+      <DependentUpon>201907271812343_guidGeneration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907272013550_NullableReferenceEmpToDep.resx">
+      <DependentUpon>201907272013550_NullableReferenceEmpToDep.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

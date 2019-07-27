@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Threading.Tasks;
 using data;
 using data.models;
@@ -30,8 +29,6 @@ namespace Repository.impl
 
         public async Task<Department> CreateDepartment(Department dep)
         {
-            if (await _context.Employees.AnyAsync(e => e.Id == dep.Id)) 
-                throw new Exception("Department with such id already exists");
             _context.Departments.Add(dep);
             await _context.SaveChangesAsync();
             return dep;
@@ -39,23 +36,17 @@ namespace Repository.impl
 
         public async Task<Department> UpdateDepartment(Department dep)
         {
-            var selectedDepartment = await GetDepartmentById(dep.Id);
-            if (selectedDepartment == null) return null;
+            var selectedDepartment = await _context.Departments.SingleAsync(e => e.Id == dep.Id);
             selectedDepartment.Title = dep.Title;
-            selectedDepartment.Employees = dep.Employees;
             await _context.SaveChangesAsync();
             return dep;
         }
 
         public async Task<Department> DeleteDepartmentById(Guid id)
         {
-            var departmentToDeletion = await _context.Departments.SingleOrDefaultAsync(d => d.Id == id);
-            if (departmentToDeletion == null) return null;
-            foreach (var emp in _context.Employees.Include("Department")
-                .Where(emp => emp.Department.Id == departmentToDeletion.Id))
-            {
-                emp.Department = null;
-            }
+            var departmentToDeletion = await _context.Departments.SingleAsync(d => d.Id == id);
+            // Cascade deletion of employees from system 
+            // TODO: create and apply some business rules here 
             var resultAfterDeletion = _context.Departments.Remove(departmentToDeletion);
             await _context.SaveChangesAsync();
             return resultAfterDeletion;
