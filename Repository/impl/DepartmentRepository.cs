@@ -44,9 +44,10 @@ namespace Repository.impl
 
         public async Task<Department> DeleteDepartmentById(Guid id)
         {
-            var departmentToDeletion = await _context.Departments.SingleAsync(d => d.Id == id);
-            // Cascade deletion of employees from system 
-            // TODO: create and apply some business rules here 
+            var departmentToDeletion = await _context.Departments.Include(d => d.Employees).SingleAsync(d => d.Id == id);
+            // All employees are left without department here
+            // TODO: create and apply some business rules here to move them to another department
+            
             var resultAfterDeletion = _context.Departments.Remove(departmentToDeletion);
             await _context.SaveChangesAsync();
             return resultAfterDeletion;
