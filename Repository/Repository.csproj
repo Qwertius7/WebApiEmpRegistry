@@ -84,8 +84,10 @@
     <Compile Include="config\Bindings.cs" />
     <Compile Include="impl\DepartmentRepository.cs" />
     <Compile Include="impl\EmployeeRepository.cs" />
+    <Compile Include="impl\ProjectRepository.cs" />
     <Compile Include="interfaces\IDepartmentRepository.cs" />
     <Compile Include="interfaces\IEmployeeRepository.cs" />
+    <Compile Include="interfaces\IProjectRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

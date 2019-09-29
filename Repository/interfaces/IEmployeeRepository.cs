@@ -7,10 +7,9 @@ namespace Repository.interfaces
 {
     public interface IEmployeeRepository
     {
-        Task<IEnumerable<Employee>> GetAllEmployees();
+        Task<IList<Employee>> GetAllEmployees();
         Task<Employee> GetEmployeeById(Guid id);
-        Task<Employee> CreateEmployee(Employee emp);
-        Task<Employee> UpdateEmployee(Employee emp);
+        Task<Employee> SaveEmployee(Employee emp);
         Task<Employee> DeleteEmployeeById(Guid id);
     }
 }

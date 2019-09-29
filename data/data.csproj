@@ -68,9 +68,16 @@
     <Compile Include="Migrations\201907272013550_NullableReferenceEmpToDep.Designer.cs">
       <DependentUpon>201907272013550_NullableReferenceEmpToDep.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909032225142_ProjectTeams.cs" />
+    <Compile Include="Migrations\201909032225142_ProjectTeams.Designer.cs">
+      <DependentUpon>201909032225142_ProjectTeams.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="models\Department.cs" />
     <Compile Include="models\Employee.cs" />
+    <Compile Include="models\ProjectMember.cs" />
+    <Compile Include="models\ProjectRole.cs" />
+    <Compile Include="models\ProjectTeam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907272013550_NullableReferenceEmpToDep.resx">
       <DependentUpon>201907272013550_NullableReferenceEmpToDep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909032225142_ProjectTeams.resx">
+      <DependentUpon>201909032225142_ProjectTeams.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

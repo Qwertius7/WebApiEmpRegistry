@@ -7,10 +7,10 @@ namespace ApplicationLayer.interfaces
 {
     public interface IDepartmentService
     {
-        Task<IEnumerable<DepartmentDto>> GetAllDepartments();
+        Task<IList<DepartmentDto>> GetAllDepartments();
         Task<DepartmentDto> GetDepartmentById(Guid id);
         Task<DepartmentDto> CreateDepartment(DepartmentDto dep);
         Task<DepartmentDto> UpdateDepartment(DepartmentDto dep);
-        Task<DepartmentDto> DeleteDepartmentById(Guid id);
+        Task DeleteDepartmentById(Guid id);
     }
 }

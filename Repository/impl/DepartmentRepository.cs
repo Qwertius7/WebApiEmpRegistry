@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using data;
 using data.models;
@@ -11,46 +12,42 @@ namespace Repository.impl
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly EmpRegistryContext _context;
-        
-        public DepartmentRepository()
+
+        public DepartmentRepository() {}
+
+        public DepartmentRepository(EmpRegistryContext context)
         {
-            _context = new EmpRegistryContext();
+            _context = context ?? throw new ArgumentException(nameof(context));
         }
         
-        public async Task<IEnumerable<Department>> GetAllDepartments()
+        public Task<List<Department>> GetAllDepartments()
         {
-            return await _context.Departments.ToListAsync();
+            return _context.Departments.Include(d => d.Employees).ToListAsync();
         }
 
-        public async Task<Department> GetDepartmentById(Guid id)
+        public Task<Department> GetDepartmentById(Guid id)
         {
-            return await _context.Departments.SingleOrDefaultAsync(e => e.Id == id);
+            return _context.Departments.Include(d => d.Employees).FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<Department> CreateDepartment(Department dep)
+        public async Task<Department> SaveDepartment(Department dep)
         {
-            _context.Departments.Add(dep);
+            if (dep == null)
+            {
+                throw new ArgumentException(nameof(dep));
+            }
+            _context.Departments.AddOrUpdate(dep);
             await _context.SaveChangesAsync();
             return dep;
         }
 
-        public async Task<Department> UpdateDepartment(Department dep)
+        public async Task DeleteDepartmentById(Department dep)
         {
-            var selectedDepartment = await _context.Departments.SingleAsync(e => e.Id == dep.Id);
-            selectedDepartment.Title = dep.Title;
-            await _context.SaveChangesAsync();
-            return dep;
-        }
-
-        public async Task<Department> DeleteDepartmentById(Guid id)
-        {
-            var departmentToDeletion = await _context.Departments.Include(d => d.Employees).SingleAsync(d => d.Id == id);
             // All employees are left without department here
             // TODO: create and apply some business rules here to move them to another department
-            
-            var resultAfterDeletion = _context.Departments.Remove(departmentToDeletion);
+
+            var resultAfterDeletion = _context.Departments.Remove(dep);
             await _context.SaveChangesAsync();
-            return resultAfterDeletion;
         }
     }
 }

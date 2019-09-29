@@ -18,6 +18,7 @@ namespace WebApiEmpRegistry
 //            builder.RegisterApiControllers();
             builder.RegisterType<DepController>().InstancePerRequest();
             builder.RegisterType<EmpController>().InstancePerRequest();
+            builder.RegisterType<ProjController>().InstancePerRequest();
 //            builder.RegisterAssemblyModules();
             builder.RegisterModule(new Bindings());
             builder.RegisterModule(new ServicesDiModule());

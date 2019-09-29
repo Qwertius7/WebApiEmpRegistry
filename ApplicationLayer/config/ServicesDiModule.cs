@@ -1,5 +1,6 @@
 using ApplicationLayer.interfaces;
 using ApplicationLayer.services;
+using ApplicationLayer.validators;
 using Autofac;
 
 namespace ApplicationLayer.config
@@ -10,6 +11,9 @@ namespace ApplicationLayer.config
         {
             builder.RegisterType<DepartmentService>().As<IDepartmentService>().InstancePerRequest();
             builder.RegisterType<EmployeeService>().As<IEmployeeService>().InstancePerRequest();
+            builder.RegisterType<ProjectService>().As<IProjectService>().InstancePerRequest();
+
+            builder.RegisterType<DepartmentValidator>().InstancePerLifetimeScope();
         }
     }
 }

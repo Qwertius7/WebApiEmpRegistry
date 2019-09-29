@@ -44,6 +44,20 @@
       <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.7.2.1\lib\net45\FluentValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentValidation.WebApi, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.WebApi.7.2.1\lib\net45\FluentValidation.WebApi.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
@@ -81,11 +95,17 @@
     <Compile Include="config\ServicesDiModule.cs" />
     <Compile Include="dto\DepartmentDto.cs" />
     <Compile Include="dto\EmployeeDto.cs" />
+    <Compile Include="dto\ProjectMemberDto.cs" />
+    <Compile Include="dto\ProjectRoleDto.cs" />
+    <Compile Include="dto\ProjectTeamDto.cs" />
     <Compile Include="interfaces\IDepartmentService.cs" />
     <Compile Include="interfaces\IEmployeeService.cs" />
+    <Compile Include="interfaces\IProjectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="services\DepartmentService.cs" />
     <Compile Include="services\EmployeeService.cs" />
+    <Compile Include="services\ProjectService.cs" />
+    <Compile Include="validators\DepartmentValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\data\data.csproj">
@@ -98,6 +118,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

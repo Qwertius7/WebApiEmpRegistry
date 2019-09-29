@@ -7,7 +7,7 @@ namespace ApplicationLayer.interfaces
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<EmployeeDto>> GetAllEmployees();
+        Task<IList<EmployeeDto>> GetAllEmployees();
         Task<EmployeeDto> GetEmployeeById(Guid id);
         Task<EmployeeDto> CreateEmployee(EmployeeDto emp);
         Task<EmployeeDto> UpdateEmployee(EmployeeDto emp);

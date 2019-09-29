@@ -10,6 +10,9 @@ namespace ApplicationLayer.config.automapper
         {
             CreateMap<Employee, EmployeeDto>();
             CreateMap<Department, DepartmentDto>();
+            CreateMap<ProjectRole, ProjectRoleDto>();
+            CreateMap<ProjectMember, ProjectMemberDto>();
+            CreateMap<ProjectTeam, ProjectTeamDto>();
             AllowNullCollections = true;
         }
     }

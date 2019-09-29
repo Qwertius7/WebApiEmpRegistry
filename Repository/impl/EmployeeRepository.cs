@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Threading.Tasks;
 using data;
 using data.models;
@@ -12,42 +13,32 @@ namespace Repository.impl
     {
         private readonly EmpRegistryContext _context;
 
-        public EmployeeRepository()
+        public EmployeeRepository(EmpRegistryContext context)
         {
-            _context = new EmpRegistryContext();
+            _context = context ?? throw new ArgumentException(nameof(context));
         }
         
-        public async Task<IEnumerable<Employee>> GetAllEmployees()
+        public async Task<IList<Employee>> GetAllEmployees()
         {
             return await _context.Employees.Include("Department").ToListAsync();
         }
 
-        public async Task<Employee> GetEmployeeById(Guid id)
+        public Task<Employee> GetEmployeeById(Guid id)
         {
-            return await _context.Employees.Include("Department").SingleOrDefaultAsync(e => e.Id == id);
+            return _context.Employees.Include("Department").FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public async Task<Employee> CreateEmployee(Employee emp)
+        public async Task<Employee> SaveEmployee(Employee emp)
         {
-            var resultAfterCreation = _context.Employees.Add(emp);
+            if (emp == null) throw new ArgumentException(nameof(emp));
+            _context.Employees.AddOrUpdate(emp);
             await _context.SaveChangesAsync();
-            return resultAfterCreation;
-        }
-
-        public async Task<Employee> UpdateEmployee(Employee emp)
-        {
-            var selectedEmployee = await _context.Employees.Include("Department").SingleAsync(e => e.Id == emp.Id);
-            selectedEmployee.FirstName = emp.FirstName;
-            selectedEmployee.LastName = emp.LastName;
-            if (selectedEmployee.DepartmentId != emp.DepartmentId)
-                selectedEmployee.SetDepartment(await _context.Departments.SingleAsync(d => d.Id == emp.DepartmentId));
-            await _context.SaveChangesAsync();
-            return selectedEmployee;
+            return emp;
         }
 
         public async Task<Employee> DeleteEmployeeById(Guid id)
         {
-            var employeeToDeletion = await _context.Employees.SingleAsync(e => e.Id == id);
+            var employeeToDeletion = await _context.Employees.FirstAsync(e => e.Id == id);
             var resultAfterDeletion = _context.Employees.Remove(employeeToDeletion);
             await _context.SaveChangesAsync();
             return resultAfterDeletion;

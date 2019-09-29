@@ -10,6 +10,9 @@ namespace ApplicationLayer.config.automapper
         {
             CreateMap<EmployeeDto, Employee>();
             CreateMap<DepartmentDto, Department>();
+            CreateMap<ProjectRoleDto, ProjectRole>();
+            CreateMap<ProjectMemberDto, ProjectMember>();
+            CreateMap<ProjectTeamDto, ProjectTeam>();
         }
     }
 }

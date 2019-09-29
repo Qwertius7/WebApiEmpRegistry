@@ -7,10 +7,9 @@ namespace Repository.interfaces
 {
     public interface IDepartmentRepository
     {
-        Task<IEnumerable<Department>> GetAllDepartments();
+        Task<List<Department>> GetAllDepartments();
         Task<Department> GetDepartmentById(Guid id);
-        Task<Department> CreateDepartment(Department dep);
-        Task<Department> UpdateDepartment(Department dep);
-        Task<Department> DeleteDepartmentById(Guid id);
+        Task<Department> SaveDepartment(Department dep);
+        Task DeleteDepartmentById(Department dep);
     }
 }
